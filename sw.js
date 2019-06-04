@@ -13,7 +13,9 @@ const cacheAssets = [
 	'/src/assets/favicon-16x16.png',
 	'/src/assets/safari-pinned-tab.svg',
 	'/src/assets/favicon.ico',
-	'/src/assets/browserconfig.xml'
+	'/src/assets/browserconfig.xml',
+	'/src/assets/android-chrome-192x192.png',
+	'/src/assets/android-chrome-512x512.png'
 ];
 
 self.addEventListener('install', (event) => {
