@@ -3,7 +3,7 @@ const cacheName = 'v1';
 const cacheAssets = [
 	//Stuff to cache
 	'/',
-	'/index.html',
+	'index.html',
 	'sw.js',
 	'manifest.json',
 	'/src/js/index.js',
