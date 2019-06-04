@@ -10,7 +10,6 @@ module.exports = {
 	},
 	'parserOptions': {
 		'ecmaVersion': 2018,
-		'sourceType': 'module'
 	},
 	'rules': {
 		'indent': [
@@ -33,6 +32,7 @@ module.exports = {
 		"max-len": [
 			0,
 			120
-		]
+		],
+		'no-console': 'off'
 	}
 };
