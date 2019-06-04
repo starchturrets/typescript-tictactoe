@@ -1,5 +1,5 @@
 {
-  "start_url": "/",
+  "start_url": "/index.html",
   "name": "Tic Tac Toe in vanilla JS",
   "short_name": "Tic Tac Toe",
   "icons": [
