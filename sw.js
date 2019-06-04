@@ -16,12 +16,10 @@
 // 	'/src/assets/browserconfig.xml'
 // ];
 
-
-
 self.addEventListener('install', (event) => {
 	event.waitUntil(
 		caches.open('I hate life').then((cache) => {
-			return cache.addAll( [
+			return cache.addAll([
 				//Stuff to cache
 				'/',
 				'index.html',
@@ -64,8 +62,7 @@ self.addEventListener('fetch', (e) => {
 	e.respondWith(
 		fetch(e.request).catch(() => {
 			console.log(e.request);
-			caches.match(e.request);
-			console.log('Responding from cache');
+			return caches.match(e.request);
 		})
 	);
 });
