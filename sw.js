@@ -3,7 +3,7 @@ const cacheName = 'v1';
 const cacheAssets = [
 	//Stuff to cache
 	'/',
-	'index.html',
+	'/index.html',
 	'sw.js',
 	'manifest.json',
 	'/src/js/index.js',
@@ -47,18 +47,18 @@ self.addEventListener('activate', (e) => {
 self.addEventListener('fetch', (e) => {
 	console.log('Service Worker: Fetching');
 	e.respondWith(
-		ajax(e.request).catch(() => {
+		fetch(e.request).catch(() => {
 			caches.match(e.request);
 			console.log('Responding from cache');
 		})
 	);
 });
 //TODO: wrap the fetch request in another promise, and abort it after ~5 seconds
-function ajax(url, timeout = 1000) {
-	return new Promise((resolve, reject) => {
-		fetch(url)
-		// .then((res) => res.json())
-			.then((data) => resolve(data));
-		setTimeout(() => reject('Request failed'), timeout);
-	});
-}
+// function ajax(url, timeout = 1000) {
+// 	return new Promise((resolve, reject) => {
+// 		fetch(url)
+// 		// .then((res) => res.json())
+// 			.then((data) => resolve(data));
+// 		setTimeout(() => reject('Request failed'), timeout);
+// 	});
+// }
