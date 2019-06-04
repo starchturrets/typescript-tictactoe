@@ -48,7 +48,7 @@ self.addEventListener('fetch', (e) => {
 	console.log('Service Worker: Fetching');
 	e.respondWith(
 		fetch(e.request).catch(() => {
-			debugger;
+			console.log(e.request);
 			caches.match(e.request);
 			console.log('Responding from cache');
 		})
