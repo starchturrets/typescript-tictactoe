@@ -27,6 +27,8 @@ self.addEventListener('install', (event) => {
 				'/manifest.json',
 				'/src/js/index.js',
 				'/src/style.css',
+				'/src/assets/android-chrome-192x192.png',
+				'/src/assets/android-chrome-512x512.png',
 				'/src/assets/apple-touch-icon.png',
 				'/src/assets/favicon-32x32.png',
 				'/src/assets/favicon-16x16.png',
