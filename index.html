@@ -6,14 +6,14 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Tic Tac Toe</title>
     <link rel="stylesheet" href="src/style.css" />
-    <script type="text/javascript" defer src="src/js/index.js"></script>
-
+    <script type="text/javascript" defer src="src/js/app.js"></script>
     <link rel="apple-touch-icon" sizes="180x180" href="/src/assets/apple-touch-icon.png" />
     <link rel="icon" type="image/png" sizes="32x32" href="/src/assets/favicon-32x32.png" />
     <link rel="icon" type="image/png" sizes="16x16" href="/src/assets/favicon-16x16.png" />
     <link rel="manifest" href="manifest.json" />
     <link rel="mask-icon" href="/src/assets/safari-pinned-tab.svg" color="#5bbad5" />
     <link rel="shortcut icon" href="/src/assets/favicon.ico" />
+
     <meta name="msapplication-TileColor" content="#da532c" />
     <meta name="msapplication-config" content="/src/assets/browserconfig.xml" />
     <meta name="theme-color" content="#ffffff" />
@@ -21,22 +21,22 @@
   <body>
     <!-- <h1>Tic Tac Toe, written in vanilla JS</h1> -->
     <div class="container">
-      <div class="container_block"></div>
-      <div class="container_block"></div>
-      <div class="container_block"></div>
+      <div data-pos="0" class="container_block"></div>
+      <div data-pos="1" class="container_block"></div>
+      <div data-pos="2" class="container_block"></div>
 
-      <div class="container_block"></div>
-      <div class="container_block"></div>
-      <div class="container_block"></div>
+      <div data-pos="3" class="container_block"></div>
+      <div data-pos="4" class="container_block"></div>
+      <div data-pos="5" class="container_block"></div>
 
-      <div class="container_block"></div>
-      <div class="container_block"></div>
-      <div class="container_block"></div>
+      <div data-pos="6" class="container_block"></div>
+      <div data-pos="7" class="container_block"></div>
+      <div data-pos="8" class="container_block"></div>
     </div>
-    <div class="modal_wrapper"></div>
-    <div class="modal">
-      <p>Would you like to be X or O?</p>
-      <button class="X">X</button> <button class="O">O</button>
-    </div>
+    <!-- <div class="modal_wrapper"></div>
+		<div class="modal">
+			<p>Would you like to be X or O?</p>
+			<button class="X">X</button> <button class="O">O</button>
+		</div> -->
   </body>
 </html>

@@ -49,7 +49,7 @@ body {
 
 .modal_wrapper {
   /* z-index: -999; */
-  content: "";
+  content: '';
   background: #000;
   position: fixed;
   /* top: 0;
@@ -63,6 +63,8 @@ body {
   font: inherit;
   border: solid 1px #000;
   border-radius: 2px;
+  margin: 0.2em;
+  /* display: block; */
 }
 .modal button:hover,
 .modal button:active,
@@ -72,4 +74,7 @@ body {
 }
 .hidden {
   display: none;
+}
+.highlight {
+  color: aqua;
 }

@@ -1,5 +1,6 @@
 //Thank God for Brad Traversy Media
 const cacheName = 'v2';
+var a = 'c';
 const cacheAssets = [
 	//Stuff to cache
 	'/',
