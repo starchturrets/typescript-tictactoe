@@ -7,7 +7,7 @@ const cacheAssets = [
 	'index.html',
 	'sw.js',
 	'/manifest.json',
-	'/src/js/index.js',
+	'/src/js/app.js',
 	'/src/style.css',
 	'/src/assets/apple-touch-icon.png',
 	'/src/assets/favicon-32x32.png',
