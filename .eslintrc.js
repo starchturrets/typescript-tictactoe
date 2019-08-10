@@ -21,5 +21,7 @@ module.exports = {
   plugins: ['@typescript-eslint'],
   rules: {
     'no-console': 'off',
+    '@typescript-eslint/no-unused-vars': 'off',
+    'prefer-destructuring': 'off',
   },
 };
