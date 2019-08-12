@@ -1,8 +1,7 @@
 import { $, $$, h } from './dom';
 import { Player, Computer, Game } from './game';
-import { threadId } from 'worker_threads';
 
-const game = new Game('X', 'O', true);
+// let game = new Game('X', 'O', false);
 const gameBoard: Element = $('div.game-board')!;
 const gameBoardChildren: NodeListOf<Element> = $$('div.game-board >div');
 const msgDiv = $('div.game-state')!;
@@ -17,9 +16,12 @@ const isBoardFull = (arr: string[]) => {
 class DOMstuff {
   gameBoard: Element;
 
+  game: Game;
+
   gameBoardChildren: NodeListOf<Element>;
 
-  constructor() {
+  constructor(game: Game) {
+    this.game = game;
     this.gameBoard = gameBoard;
     this.gameBoardChildren = gameBoardChildren;
   }
@@ -27,15 +29,15 @@ class DOMstuff {
   handleClick = ($ev: Event) => {
     const $el = $ev.target as Element;
     switch (true) {
-      case game.playerOneTurn && !game.isBoardFull(): {
-        $el.textContent = game.playerOne.letter;
-        game.updateState(gameBoardChildren);
+      case this.game.playerOneTurn && !this.game.isBoardFull(): {
+        $el.textContent = this.game.playerOne.letter;
+        this.game.updateState(gameBoardChildren);
         $el.removeEventListener('click', this.handleClick);
         break;
       }
-      case !game.playerOneTurn && !game.isBoardFull(): {
-        $el.textContent = game.playerTwo.letter;
-        game.updateState(gameBoardChildren);
+      case !this.game.playerOneTurn && !this.game.isBoardFull(): {
+        $el.textContent = this.game.playerTwo.letter;
+        this.game.updateState(gameBoardChildren);
 
         $el.removeEventListener('click', this.handleClick);
 
@@ -45,16 +47,16 @@ class DOMstuff {
       default:
         break;
     }
-    game.playerOneTurn = !game.playerOneTurn;
-    msgDiv.textContent = game.playerOneTurn ? 'Player One Turn' : 'Player Two Turn';
+    this.game.playerOneTurn = !this.game.playerOneTurn;
+    msgDiv.textContent = this.game.playerOneTurn ? 'Player One Turn' : 'Player Two Turn';
 
-    if (!game.isGameWon() && game.isBoardFull()) {
+    if (!this.game.isGameWon() && this.game.isBoardFull()) {
       this.disableListeners();
       msgDiv.textContent = 'Draw';
-    } else if (game.isGameWon() === true) {
+    } else if (this.game.isGameWon() === true) {
       this.disableListeners();
-      msgDiv.textContent = `${game.winner} wins!`;
-      game.highlightedCells.forEach((index: number) => {
+      msgDiv.textContent = `${this.game.winner} wins!`;
+      this.game.highlightedCells.forEach((index: number) => {
         $(`div[data-index="${index}"]`)!.classList.add('highlight');
       });
     }
@@ -75,35 +77,48 @@ class DOMstuff {
 
 class SingleDOM extends DOMstuff {
   computerTurn = () => {
-    const randomIndex = game.playerTwo.randomItem();
-    if (game.stateArray[randomIndex] !== '' && !game.isBoardFull()) {
+    // this.checkForWinner();
+    this.game.playerOneTurn = false;
+    msgDiv.textContent = this.game.playerOneTurn
+      ? `${this.game.playerOne.name} turn`
+      : `${this.game.playerTwo.name} turn`;
+    const randomIndex = this.game.playerTwo.randomItem();
+    if (this.game.stateArray[randomIndex] !== '' && !this.game.isBoardFull()) {
       this.computerTurn();
     } else {
       const $el: Element = $(`div[data-index="${randomIndex}"]`)!;
-      $el.textContent = game.playerTwo.letter;
+      $el.textContent = this.game.playerTwo.letter;
       $el.removeEventListener('click', this.handleClick);
       this.checkForWinner();
     }
   };
 
   handleClick = ($ev: Event) => {
-    // this.checkForWinner();
     this.checkForWinner();
     const $el = $ev.target as Element;
-    const won: boolean = game.isGameWon();
+    const won: boolean = this.game.isGameWon();
     $el.removeEventListener('click', this.handleClick);
 
-    // game.playerOneTurn = !game.playerOneTurn;
     switch (true) {
-      case game.playerOneTurn && !game.isBoardFull() && won === false: {
-        $el.textContent = game.playerOne.letter;
-        msgDiv.textContent = game.playerOneTurn
-          ? `${game.playerOne.name} turn`
-          : `${game.playerTwo.name} turn`;
+      case this.game.playerOneTurn && !this.game.isBoardFull() && won === false: {
+        $el.textContent = this.game.playerOne.letter;
 
-        game.updateState(gameBoardChildren);
+        this.game.updateState(gameBoardChildren);
         $el.removeEventListener('click', this.handleClick);
-        this.computerTurn();
+        this.disableListeners();
+        msgDiv.textContent = this.game.playerOneTurn
+          ? `${this.game.playerOne.name} turn`
+          : `${this.game.playerTwo.name} turn`;
+        setTimeout(() => {
+          if (this.game.isGameWon() === false) {
+            this.computerTurn();
+            this.game.playerOneTurn = true;
+            this.enableListeners();
+          }
+
+          // game.playerOneTurn = !game.playerOneTurn;
+        }, 500);
+
         this.checkForWinner();
         break;
       }
@@ -126,19 +141,20 @@ class SingleDOM extends DOMstuff {
     // });
     // }
   };
+
   checkForWinner = () => {
-    const won = game.isGameWon();
+    const won = this.game.isGameWon();
     console.log(won);
     switch (true) {
-      case won === false && game.isBoardFull(): {
+      case won === false && this.game.isBoardFull(): {
         this.disableListeners();
         msgDiv.textContent = 'Draw';
         break;
       }
       case won === true: {
         this.disableListeners();
-        msgDiv.textContent = `${game.winner} wins!`;
-        game.highlightedCells.forEach((index: number) => {
+        msgDiv.textContent = `${this.game.winner} wins!`;
+        this.game.highlightedCells.forEach((index: number) => {
           $(`div[data-index="${index}"]`)!.classList.add('highlight');
         });
         break;
@@ -148,8 +164,18 @@ class SingleDOM extends DOMstuff {
     }
   };
 }
-class MultiDom extends DOMstuff {}
-const DOM = new SingleDOM();
-DOM.enableListeners();
 
-const startGame = () => {};
+const startGame = () => {
+  document.body.className = 'modal-open';
+  const modal = h('div', { classname: 'modal' }, [
+    h('button', { className: 'btn-play-alone' }, ['Play Alone']),
+    h('button', { className: 'btn-play-multi' }, [`Play With Someone`]),
+  ]);
+
+  document.body.appendChild(modal);
+  const game = new Game('X', 'O', false);
+  const DOM = new DOMstuff(game);
+  DOM.enableListeners();
+};
+
+startGame();
