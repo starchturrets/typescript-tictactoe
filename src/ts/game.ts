@@ -1,23 +1,17 @@
-const $ = document.querySelector.bind(document);
-const $$ = document.querySelectorAll.bind(document);
+import { $, $$ } from './dom';
 
-const gameState: string[] = ['', '', '', '', '', '', '', '', ''];
-
-class Player {
+export class Player {
   letter: string;
 
-  won: boolean;
-
-  constructor(letter: string, won: boolean) {
+  constructor(letter: string) {
     this.letter = letter;
-    this.won = won;
   }
 }
 
-class Computer extends Player {
-  randomItem = () => Math.floor(Math.random() * gameState.length);
+export class Computer extends Player {
+  randomItem = () => Math.floor(Math.random() * 8);
 }
-class Game {
+export class Game {
   // Handles game stuff
 
   stateArray: string[];
@@ -32,17 +26,12 @@ class Game {
 
   boardChildren: NodeListOf<Element>;
 
-  constructor(stateArray: string[], target: Element) {
-    this.stateArray = stateArray;
-    this.board = target;
-
+  constructor(playerOneLetter: string, playerTwoLetter: string) {
+    this.stateArray = ['', '', '', '', '', '', '', '', ''];
+    this.board = $('div.game-board')!;
     this.boardChildren = $$('div.game-board div')!;
-  }
-
-  initialize(userLetter: string, playerLetter: string) {
-    this.playerOne = new Player(userLetter, false);
-    this.playerTwo = new Player(playerLetter, false);
-    this.enableListeners();
+    this.playerOne = new Player(playerOneLetter);
+    this.playerTwo = new Player(playerTwoLetter);
   }
 
   updateState = (index: number, letter: string) => {
@@ -74,9 +63,8 @@ class Game {
   };
 
   removeListener = (el: Element) => {
-    // const el: Element = this.boardChildren[index];
     console.log(el);
-    // el.removeEventListener('click', this.handle);
+    el.removeEventListener('click', this.handle);
   };
 
   handle = (ev: Event) => {
@@ -88,7 +76,6 @@ class Game {
       } else {
         this.updateState(index, this.playerTwo.letter);
       }
-      // this.updateBoard(board.stateArray);
       const bool: boolean = this.checkForWinner(); // Has anyone won?
       this.isBoardFull();
       if (bool === false && !this.isBoardFull()) {
@@ -132,9 +119,5 @@ class Game {
       }
     }
     return false;
-    // winningCombos.forEach((item: number[]) => {});
   };
 }
-
-const board = new Game(gameState, $('div.game-board')!);
-board.initialize('X', 'O');
