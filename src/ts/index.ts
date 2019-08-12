@@ -167,15 +167,20 @@ class SingleDOM extends DOMstuff {
 
 const startGame = () => {
   document.body.className = 'modal-open';
-  const modal = h('div', { classname: 'modal' }, [
-    h('button', { className: 'btn-play-alone' }, ['Play Alone']),
-    h('button', { className: 'btn-play-multi' }, [`Play With Someone`]),
-  ]);
+  const modal = h('div', { className: 'modal' }, [
+    h('h2', {}, ['How would you like to play?']),
 
+    h('button', { className: 'btn-play-alone' }, ['Play Alone']),
+    h('button', { className: 'btn-play-multi' }, [`Play With A Friend`]),
+    h('button', { className: 'btn-play-anyways' }, [`Play With An Enemy`]),
+  ]);
+  const btnSingle: Element = $('.btn-play-alone')!;
+  const btnFriend: Element = $('.btn-play-multi')!;
+  const btnEnemy: Element = $('.btn-play-anyways')!;
   document.body.appendChild(modal);
-  const game = new Game('X', 'O', false);
-  const DOM = new DOMstuff(game);
-  DOM.enableListeners();
+  // const game = new Game('X', 'O', false);
+  // const DOM = new DOMstuff(game);
+  // DOM.enableListeners();
 };
 
 startGame();
