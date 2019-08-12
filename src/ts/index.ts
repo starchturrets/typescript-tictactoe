@@ -174,13 +174,62 @@ const startGame = () => {
     h('button', { className: 'btn-play-multi' }, [`Play With A Friend`]),
     h('button', { className: 'btn-play-anyways' }, [`Play With An Enemy`]),
   ]);
+  const h2: Element = modal.querySelector('h2')!;
+  document.body.appendChild(modal);
   const btnSingle: Element = $('.btn-play-alone')!;
   const btnFriend: Element = $('.btn-play-multi')!;
   const btnEnemy: Element = $('.btn-play-anyways')!;
-  document.body.appendChild(modal);
-  // const game = new Game('X', 'O', false);
-  // const DOM = new DOMstuff(game);
-  // DOM.enableListeners();
+  const singlePlayer = () => {
+    h2.textContent = 'Would you like to be X or O?';
+    btnEnemy.remove();
+    btnFriend.remove();
+    btnSingle.remove();
+
+    const btnX = h('button', { className: 'btn-x' }, ['Play With X']);
+    const btnO = h('button', { className: 'btn-o' }, ['Play With O']);
+    modal.append(btnX, btnO);
+    btnX.addEventListener('click', () => {
+      modal.remove();
+      document.body.className = '';
+      const game = new Game('X', 'O', true);
+      const DOM = new SingleDOM(game);
+      DOM.enableListeners();
+    });
+    btnO.addEventListener('click', () => {
+      modal.remove();
+      document.body.className = '';
+      const game = new Game('O', 'X', true);
+      const DOM = new SingleDOM(game);
+      DOM.enableListeners();
+    });
+  };
+
+  btnSingle.addEventListener('click', singlePlayer);
+  const multiplayer = () => {
+    h2.textContent = 'Would you like to be X or O?';
+    btnEnemy.remove();
+    btnFriend.remove();
+    btnSingle.remove();
+
+    const btnX = h('button', { className: 'btn-x' }, ['Play With X']);
+    const btnO = h('button', { className: 'btn-o' }, ['Play With O']);
+    modal.append(btnX, btnO);
+    btnX.addEventListener('click', () => {
+      modal.remove();
+      document.body.className = '';
+      const game = new Game('X', 'O', false);
+      const DOM = new DOMstuff(game);
+      DOM.enableListeners();
+    });
+    btnO.addEventListener('click', () => {
+      modal.remove();
+      document.body.className = '';
+      const game = new Game('X', 'O', true);
+      const DOM = new DOMstuff(game);
+      DOM.enableListeners();
+    });
+  };
+  btnFriend.addEventListener('click', multiplayer);
 };
 
 startGame();

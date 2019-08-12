@@ -11,6 +11,7 @@ div.game-board {
   div {
     align-items: center;
     border: 1px solid #454545;
+    cursor: pointer;
     display: flex;
     font-size: 3rem;
     font-weight: 700;
@@ -19,9 +20,9 @@ div.game-board {
 }
 
 div.game-state {
-  width: 30rem;
   font-size: 2rem;
-  margin: 10rem auto;
+  margin: 2rem auto;
+  width: 30rem;
 }
 
 div.highlight {
@@ -37,20 +38,20 @@ div.modal {
   box-shadow: 2px 3px 1px #000;
   font-size: 1.2rem;
   height: 22em;
-  width: 30rem;
+  left: 0;
+  margin: 2rem auto;
   padding: 3em;
   position: fixed;
-  top: 0;
-  left: 0;
   right: 0;
-  margin: 2rem auto;
+  top: 0;
+  width: 30rem;
 
   button {
-    margin: 0.5rem;
-    padding: 0.5rem;
+    border: solid 1px #999;
     box-shadow: 1px 1px 1px #000;
     display: block;
-    border: solid 1px #999;
+    margin: 0.5rem;
+    padding: 0.5rem;
 
     &:hover,
     &:active,
