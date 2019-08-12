@@ -22,83 +22,46 @@ export class Game {
 
   playerTwo: any;
 
-  board: Element;
-
-  boardChildren: NodeListOf<Element>;
-
   constructor(playerOneLetter: string, playerTwoLetter: string) {
     this.stateArray = ['', '', '', '', '', '', '', '', ''];
-    this.board = $('div.game-board')!;
-    this.boardChildren = $$('div.game-board div')!;
     this.playerOne = new Player(playerOneLetter);
     this.playerTwo = new Player(playerTwoLetter);
   }
 
-  updateState = (index: number, letter: string) => {
-    if (this.stateArray[index] === '') {
-      this.playerOneTurn = !this.playerOneTurn;
-      this.stateArray[index] = letter;
-      this.updateBoard(index, letter);
-    }
-  };
-
-  updateBoard = (index: number, letter: string) => {
-    console.log(index);
-    const css = `div[data-index="${index}"]`;
-    const $el = $(css)!;
-    $el.textContent = letter;
-    this.removeListener($el);
-  };
-
-  enableListeners = () => {
-    this.boardChildren.forEach((el: Element) => {
-      el.addEventListener('click', this.handle);
+  updateState = ($cells: NodeListOf<Element>) => {
+    $cells.forEach((item: Element, index: number) => {
+      this.stateArray[index] = item.textContent!;
     });
-  };
-
-  disableListeners = () => {
-    this.boardChildren.forEach((el: Element) => {
-      el.removeEventListener('click', this.handle);
-    });
-  };
-
-  removeListener = (el: Element) => {
-    console.log(el);
-    el.removeEventListener('click', this.handle);
   };
 
   handle = (ev: Event) => {
-    if (ev.target instanceof HTMLElement) {
-      const index: number = Number(ev.target!.dataset!.index!);
-      this.disableListeners();
-      if (this.playerOneTurn) {
-        this.updateState(index, this.playerOne.letter);
-      } else {
-        this.updateState(index, this.playerTwo.letter);
-      }
-      const bool: boolean = this.checkForWinner(); // Has anyone won?
-      this.isBoardFull();
-      if (bool === false && !this.isBoardFull()) {
-        // If not, continue game
-        this.enableListeners();
-      } else if (bool === true) {
-        console.log('Winner');
-        // this.disableListeners();
-      } else if (!bool && this.isBoardFull()) {
-        console.log('Draw');
-      }
-    }
+    // if (ev.target instanceof HTMLElement) {
+    //   const index: number = Number(ev.target!.dataset!.index!);
+    //   // this.disableListeners();
+    //   if (this.playerOneTurn) {
+    //     this.updateState(index, this.playerOne.letter);
+    //   } else {
+    //     this.updateState(index, this.playerTwo.letter);
+    //   }
+    //   const bool: boolean = this.checkForWinner(); // Has anyone won?
+    //   this.isBoardFull();
+    //   if (bool === false && !this.isBoardFull()) {
+    //     // If not, continue game
+    //     // this.enableListeners();
+    //   } else if (bool === true) {
+    //     console.log('Winner');
+    //     // this.disableListeners();
+    //   } else if (!bool && this.isBoardFull()) {
+    //     console.log('Draw');
+    //   }
+    // }
   };
 
   isBoardFull = () => {
-    const arr: string[] = this.stateArray;
-    if (arr.every((item: string) => item !== '')) {
-      return true;
-    }
-    return false;
+    return this.stateArray.every((item: string) => item !== '');
   };
 
-  checkForWinner = () => {
+  isGameWon = () => {
     const winningCombos: string[][] | number[][] = [
       [0, 1, 2],
       [3, 4, 5],
@@ -115,9 +78,16 @@ export class Game {
       const [a, b, c] = winningCombos[i];
       const sequence: string[] = [this.stateArray[a], this.stateArray[b], this.stateArray[c]];
       if (checkArray(sequence) === true) {
-        return true;
+        // If anyone won, return the winning player's letter
+        if (sequence[0] === this.playerOne.letter) return [this.playerOne.letter, winningCombos[i]];
+        if (sequence[0] === this.playerTwo.letter) return [this.playerTwo.letter, winningCombos[i]];
       }
     }
-    return false;
+
+    if (this.isBoardFull()) {
+      return 'Draw';
+    }
+    // Default, if nobody won and the board is not yet full
+    return 'Not Won';
   };
 }
