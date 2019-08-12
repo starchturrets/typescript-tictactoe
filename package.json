@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "serve": "parcel serve src/index.html --open"
+    "serve": "parcel serve src/index.html --open",
+    "build": "parcel build src/index.html"
   },
   "keywords": [],
   "author": "",
@@ -12,17 +13,22 @@
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^1.13.0",
     "@typescript-eslint/parser": "^1.13.0",
+    "cssnano": "^4.1.10",
     "eslint": "^5.3.0",
     "eslint-config-airbnb-base": "^13.2.0",
     "eslint-config-airbnb-typescript": "^4.0.1",
     "eslint-config-prettier": "^6.0.0",
     "eslint-plugin-import": "^2.18.2",
     "eslint-plugin-prettier": "^3.1.0",
+    "posthtml-favicons": "^1.3.0",
     "sass": "^1.22.9",
     "stylelint": "^10.1.0",
     "stylelint-config-standard": "^18.3.0",
     "typescript": "^3.5.3"
   },
+  "eslintIgnore": [
+    "/dist"
+  ],
   "prettier": {
     "printWidth": 100,
     "singleQuote": true,
@@ -30,5 +36,11 @@
   },
   "stylelint": {
     "extends": "stylelint-config-standard"
+  },
+  "cache": {
+    "disablePlugin": false,
+    "inDev": false,
+    "strategy": "default",
+    "clearDist": true
   }
 }
