@@ -17,7 +17,7 @@ const isBoardFull = () => {
   }
   return false;
 };
-const newGame = new Game('X', 'O');
+const game = new Game('X', 'O');
 
 class DOMstuff {
   gameBoard: Element;
@@ -29,13 +29,34 @@ class DOMstuff {
     this.gameBoardChildren = gameBoardChildren;
   }
 
-  handleClick = () => {
-    console.log(newGame.playerOneTurn);
+  handleClick = ($ev: Event) => {
+    const $el = $ev.target as Element;
+
+    switch (true) {
+      case game.playerOneTurn && !game.isBoardFull(): {
+        $el.textContent = game.playerOne.letter;
+        break;
+      }
+      case !game.playerOneTurn && !game.isBoardFull(): {
+        $el.textContent = game.playerTwo.letter;
+        break;
+      }
+
+      default:
+        break;
+    }
+    game.playerOneTurn = !game.playerOneTurn;
   };
 
   enableListeners() {
     this.gameBoardChildren.forEach(($el: Element) =>
       $el.addEventListener('click', this.handleClick),
+    );
+  }
+
+  disableListeners() {
+    this.gameBoardChildren.forEach(($el: Element) =>
+      $el.removeEventListener('click', this.handleClick),
     );
   }
 }
