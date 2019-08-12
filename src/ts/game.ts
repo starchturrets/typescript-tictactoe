@@ -1,5 +1,3 @@
-import { $, $$ } from './dom';
-
 export class Player {
   letter: string;
 
@@ -80,5 +78,3 @@ export class Game {
     return false;
   };
 }
-
-export class SinglePlayer extends Game {}

@@ -10,7 +10,7 @@ div.game-board {
 
   div {
     align-items: center;
-    border: 1px solid #454545;
+    border: 2px solid #454545;
     cursor: pointer;
     display: flex;
     font-size: 3rem;
@@ -21,12 +21,14 @@ div.game-board {
 
 div.game-state {
   font-size: 2rem;
+  height: 2.4rem;
   margin: 2rem auto;
   width: 30rem;
 }
 
 div.highlight {
-  background-color: aqua;
+  background-color: #4ecdc4;
+  color: #454545;
 }
 
 body.modal-open {
