@@ -3,8 +3,11 @@ import { $, $$ } from './dom';
 export class Player {
   letter: string;
 
-  constructor(letter: string) {
+  name: string;
+
+  constructor(letter: string, name: string) {
     this.letter = letter;
+    this.name = name;
   }
 }
 
@@ -13,6 +16,9 @@ export class Computer extends Player {
 }
 export class Game {
   // Handles game stuff
+  winner: string;
+
+  highlightedCells: number[];
 
   stateArray: string[];
 
@@ -22,39 +28,23 @@ export class Game {
 
   playerTwo: any;
 
-  constructor(playerOneLetter: string, playerTwoLetter: string) {
+  constructor(playerOneLetter: string, playerTwoLetter: string, singlePlayer: boolean) {
     this.stateArray = ['', '', '', '', '', '', '', '', ''];
-    this.playerOne = new Player(playerOneLetter);
-    this.playerTwo = new Player(playerTwoLetter);
+    if (singlePlayer === false) {
+      this.playerOne = new Player(playerOneLetter, 'Player One');
+      this.playerTwo = new Player(playerTwoLetter, 'Player Two');
+    } else {
+      this.playerOne = new Player(playerOneLetter, 'Player');
+      this.playerTwo = new Computer(playerTwoLetter, 'Computer');
+    }
+    this.winner = '';
+    this.highlightedCells = [];
   }
 
   updateState = ($cells: NodeListOf<Element>) => {
     $cells.forEach((item: Element, index: number) => {
       this.stateArray[index] = item.textContent!;
     });
-  };
-
-  handle = (ev: Event) => {
-    // if (ev.target instanceof HTMLElement) {
-    //   const index: number = Number(ev.target!.dataset!.index!);
-    //   // this.disableListeners();
-    //   if (this.playerOneTurn) {
-    //     this.updateState(index, this.playerOne.letter);
-    //   } else {
-    //     this.updateState(index, this.playerTwo.letter);
-    //   }
-    //   const bool: boolean = this.checkForWinner(); // Has anyone won?
-    //   this.isBoardFull();
-    //   if (bool === false && !this.isBoardFull()) {
-    //     // If not, continue game
-    //     // this.enableListeners();
-    //   } else if (bool === true) {
-    //     console.log('Winner');
-    //     // this.disableListeners();
-    //   } else if (!bool && this.isBoardFull()) {
-    //     console.log('Draw');
-    //   }
-    // }
   };
 
   isBoardFull = () => {
@@ -78,16 +68,15 @@ export class Game {
       const [a, b, c] = winningCombos[i];
       const sequence: string[] = [this.stateArray[a], this.stateArray[b], this.stateArray[c]];
       if (checkArray(sequence) === true) {
-        // If anyone won, return the winning player's letter
-        if (sequence[0] === this.playerOne.letter) return [this.playerOne.letter, winningCombos[i]];
-        if (sequence[0] === this.playerTwo.letter) return [this.playerTwo.letter, winningCombos[i]];
+        this.highlightedCells = winningCombos[i];
+        if (sequence[0] === this.playerOne.letter) {
+          this.winner = this.playerOne.name;
+        } else if (sequence[0] === this.playerTwo.letter) {
+          this.winner = this.playerTwo.name;
+        }
+        return true;
       }
     }
-
-    if (this.isBoardFull()) {
-      return 'Draw';
-    }
-    // Default, if nobody won and the board is not yet full
-    return 'Not Won';
+    return false;
   };
 }

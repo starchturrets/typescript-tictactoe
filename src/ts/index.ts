@@ -1,10 +1,10 @@
 import { $, $$, h } from './dom';
 import { Player, Computer, Game } from './game';
+import { threadId } from 'worker_threads';
 
-const gameState: string[] = ['', '', '', '', '', '', '', '', ''];
+const game = new Game('X', 'O', true);
 const gameBoard: Element = $('div.game-board')!;
 const gameBoardChildren: NodeListOf<Element> = $$('div.game-board >div');
-console.log(gameBoardChildren);
 const msgDiv = $('div.game-state')!;
 const updateMsg = (msg: string) => {
   msgDiv.textContent = msg;
@@ -13,7 +13,6 @@ const updateMsg = (msg: string) => {
 const isBoardFull = (arr: string[]) => {
   return arr.every((item: string) => item !== '');
 };
-const game = new Game('X', 'O');
 
 class DOMstuff {
   gameBoard: Element;
@@ -28,11 +27,6 @@ class DOMstuff {
   handleClick = ($ev: Event) => {
     const $el = $ev.target as Element;
     switch (true) {
-      case game.isGameWon() === 'Won': {
-        console.log('Winner');
-        this.disableListeners();
-        break;
-      }
       case game.playerOneTurn && !game.isBoardFull(): {
         $el.textContent = game.playerOne.letter;
         game.updateState(gameBoardChildren);
@@ -53,19 +47,14 @@ class DOMstuff {
     }
     game.playerOneTurn = !game.playerOneTurn;
     msgDiv.textContent = game.playerOneTurn ? 'Player One Turn' : 'Player Two Turn';
-    const [msg, sequence]: [string, string[]] = game.isGameWon();
-    if (msg === 'Draw' && game.isBoardFull()) {
-      console.log('Draw');
+
+    if (!game.isGameWon() && game.isBoardFull()) {
+      this.disableListeners();
       msgDiv.textContent = 'Draw';
-    } else if (msg === game.playerOne.letter) {
-      msgDiv.textContent = 'Player One Wins'!;
-      console.log(sequence);
-      sequence.forEach((index: string) => {
-        $(`div[data-index="${index}"]`)!.classList.add('highlight');
-      });
-    } else if (msg === game.playerTwo.letter) {
-      msgDiv.textContent = 'Player Two Wins'!;
-      sequence.forEach((index: string) => {
+    } else if (game.isGameWon() === true) {
+      this.disableListeners();
+      msgDiv.textContent = `${game.winner} wins!`;
+      game.highlightedCells.forEach((index: number) => {
         $(`div[data-index="${index}"]`)!.classList.add('highlight');
       });
     }
@@ -83,5 +72,84 @@ class DOMstuff {
     );
   }
 }
-const DOM = new DOMstuff();
+
+class SingleDOM extends DOMstuff {
+  computerTurn = () => {
+    const randomIndex = game.playerTwo.randomItem();
+    if (game.stateArray[randomIndex] !== '' && !game.isBoardFull()) {
+      this.computerTurn();
+    } else {
+      const $el: Element = $(`div[data-index="${randomIndex}"]`)!;
+      $el.textContent = game.playerTwo.letter;
+      $el.removeEventListener('click', this.handleClick);
+      this.checkForWinner();
+    }
+  };
+
+  handleClick = ($ev: Event) => {
+    // this.checkForWinner();
+    this.checkForWinner();
+    const $el = $ev.target as Element;
+    const won: boolean = game.isGameWon();
+    $el.removeEventListener('click', this.handleClick);
+
+    // game.playerOneTurn = !game.playerOneTurn;
+    switch (true) {
+      case game.playerOneTurn && !game.isBoardFull() && won === false: {
+        $el.textContent = game.playerOne.letter;
+        msgDiv.textContent = game.playerOneTurn
+          ? `${game.playerOne.name} turn`
+          : `${game.playerTwo.name} turn`;
+
+        game.updateState(gameBoardChildren);
+        $el.removeEventListener('click', this.handleClick);
+        this.computerTurn();
+        this.checkForWinner();
+        break;
+      }
+
+      default:
+        break;
+    }
+
+    // msgDiv.textContent = game.playerOneTurn
+    //   ? `${game.playerOne.name} turn`
+    //   : `${game.playerTwo.name} turn`;
+    // if (!game.isGameWon() && game.isBoardFull()) {
+    // this.disableListeners();
+    // msgDiv.textContent = 'Draw';
+    // } else if (game.isGameWon() === true) {
+    // this.disableListeners();
+    // msgDiv.textContent = `${game.winner} wins!`;
+    // game.highlightedCells.forEach((index: number) => {
+    //   $(`div[data-index="${index}"]`)!.classList.add('highlight');
+    // });
+    // }
+  };
+  checkForWinner = () => {
+    const won = game.isGameWon();
+    console.log(won);
+    switch (true) {
+      case won === false && game.isBoardFull(): {
+        this.disableListeners();
+        msgDiv.textContent = 'Draw';
+        break;
+      }
+      case won === true: {
+        this.disableListeners();
+        msgDiv.textContent = `${game.winner} wins!`;
+        game.highlightedCells.forEach((index: number) => {
+          $(`div[data-index="${index}"]`)!.classList.add('highlight');
+        });
+        break;
+      }
+      default:
+        break;
+    }
+  };
+}
+class MultiDom extends DOMstuff {}
+const DOM = new SingleDOM();
 DOM.enableListeners();
+
+const startGame = () => {};
