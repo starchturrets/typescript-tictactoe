@@ -2,7 +2,7 @@ module.exports = {
   plugins: {
     'posthtml-favicons': {
       configuration: {
-        path: 'typescript-tic-tac-toe/src', // Path for overriding default icons path. `string`
+        path: 'dist', // Path for overriding default icons path. `string`
         appName: 'Typescript Tic Tac Toe', // Your application's name. `string`
         appDescription: 'A tic tac toe app written in typescrript', // Your application's description. `string`
         developerName: null, // Your (or your developer's) name. `string`
