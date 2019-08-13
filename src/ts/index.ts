@@ -62,7 +62,7 @@ const startGame = () => {
     btnO.addEventListener('click', () => {
       modal.remove();
       document.body.className = '';
-      const game = new Game('X', 'O', true);
+      const game = new Game('O', 'X', false);
       const DOM = new DOMstuff(game);
       DOM.enableListeners();
     });
