@@ -3,8 +3,8 @@ module.exports = {
     'posthtml-favicons': {
       configuration: {
         path: 'typescript-tic-tac-toe/src', // Path for overriding default icons path. `string`
-        appName: null, // Your application's name. `string`
-        appDescription: null, // Your application's description. `string`
+        appName: 'Typescript Tic Tac Toe', // Your application's name. `string`
+        appDescription: 'A tic tac toe app written in typescrript', // Your application's description. `string`
         developerName: null, // Your (or your developer's) name. `string`
         developerURL: null, // Your (or your developer's) URL. `string`
         dir: 'auto', // Primary text direction for name, short_name, and description
