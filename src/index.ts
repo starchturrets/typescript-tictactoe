@@ -1,5 +1,5 @@
-import { h, SingleDOM, DOMstuff } from './dom';
-import { Game } from './game';
+import { h, SingleDOM, DOMstuff } from './ts/dom';
+import { Game } from './ts/game';
 
 const startGame = () => {
   // Create and append modal
@@ -74,3 +74,16 @@ const startGame = () => {
 };
 
 startGame();
+
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker
+    .register('sw.ts')
+    .then(reg => {
+      // registration worked
+      console.log(`Registration succeeded. Scope is ${reg.scope}`);
+    })
+    .catch(error => {
+      // registration failed
+      console.log(`Registration failed with ${error}`);
+    });
+}
